@@ -8,25 +8,35 @@ var divMensagemErro = document.getElementById('mensagemErro');
 var tabelaAgendamentos = document.getElementById('tabelaAgendamentos');
 
 var listaAgendamentos = [];
-var agendamentoExemplo = {
-    nome: 'Evento de Exemplo',
-    data: new Date(),
+
+function removerAgendamento(event){
+    var posicao = event.target.getAttribute('data-agenda');
+    listaAgendamentos.splice(posicao, 1);
+    atualizarAgendamentos();
 }
-listaAgendamentos.push(agendamentoExemplo);
 
 function atualizarAgendamentos() {
     if (listaAgendamentos.length === 0){
         tabelaAgendamentos.innerHTML = '<tr><td colspan="3">Nenhum agendamento</td></tr>';
         return;
     }
+    tabelaAgendamentos.innerHTML = '';
     for (var i = 0; i < listaAgendamentos.length; i++){
         var agendamento = listaAgendamentos[i];
         var linha = document.createElement('tr');
         var celulaNome = document.createElement('td');
         var celulaData = document.createElement('td');
         var celulaAcoes = document.createElement('td');
+        var botaoExcluir = document.createElement('button');
+        botaoExcluir.setAttribute('data-agenda', i);
+        botaoExcluir.classList.add('btn');
+        botaoExcluir.classList.add('btn-danger');
+        botaoExcluir.classList.add('btn-sm');
+        botaoExcluir.addEventListener('click', removerAgendamento);
         celulaNome.innerText = agendamento.nome;
         celulaData.innerText = agendamento.data;
+        botaoExcluir.innerText = "Remover";
+        celulaAcoes.appendChild(botaoExcluir);
         linha.appendChild(celulaNome);
         linha.appendChild(celulaData);
         linha.appendChild(celulaAcoes);
@@ -92,6 +102,12 @@ function salvarNovoEvento(event) {
     var dataEvento = inputDataEvento.value;
     if (novoEventoValido(nomeEvento, dataEvento)) {
         console.log('Evento é válido!');
+        listaAgendamentos.push({
+            nome: nomeEvento,
+            data: new Date(dataEvento),
+        });
+        atualizarAgendamentos();
+        ocultarNovoEvento();
     } else {
         console.log('Evento é inválido!');
     }
