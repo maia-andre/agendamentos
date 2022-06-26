@@ -5,11 +5,33 @@ var formNovoEvento = document.getElementById('formNovoEvento');
 var inputNomeEvento = document.getElementById('nomeEvento');
 var inputDataEvento = document.getElementById('dataEvento');
 var divMensagemErro = document.getElementById('mensagemErro');
+var tabelaAgendamentos = document.getElementById('tabelaAgendamentos');
 
 var listaAgendamentos = [];
+var agendamentoExemplo = {
+    nome: 'Evento de Exemplo',
+    data: new Date(),
+}
+listaAgendamentos.push(agendamentoExemplo);
 
 function atualizarAgendamentos() {
-    
+    if (listaAgendamentos.length === 0){
+        tabelaAgendamentos.innerHTML = '<tr><td colspan="3">Nenhum agendamento</td></tr>';
+        return;
+    }
+    for (var i = 0; i < listaAgendamentos.length; i++){
+        var agendamento = listaAgendamentos[i];
+        var linha = document.createElement('tr');
+        var celulaNome = document.createElement('td');
+        var celulaData = document.createElement('td');
+        var celulaAcoes = document.createElement('td');
+        celulaNome.innerText = agendamento.nome;
+        celulaData.innerText = agendamento.data;
+        linha.appendChild(celulaNome);
+        linha.appendChild(celulaData);
+        linha.appendChild(celulaAcoes);
+        tabelaAgendamentos.appendChild(linha);
+    }
 }
 
 function limparNovoEvento() {
@@ -78,3 +100,4 @@ function salvarNovoEvento(event) {
 buttonNovoEvento.addEventListener('click', mostrarNovoEvento);
 buttonCancelar.addEventListener('click', ocultarNovoEvento);
 formNovoEvento.addEventListener('submit', salvarNovoEvento);
+window.addEventListener('load', atualizarAgendamentos);
