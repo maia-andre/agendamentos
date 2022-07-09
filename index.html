@@ -7,29 +7,39 @@
   <title>Minha Agenda</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
+
 <body>
   <div class="container">
     <div class="row">
       <div class="col">
-        <h1>Minha Agenda</h1>
+        <h1 style="text-align: center">Agenda do Transporte</h1>
       </div>
     </div>
-    <div id="novoEvento" class="row my-2 mx-1 py-2 border rounded d-none">
+    <!-- Início do container para inclusão de novos eventos na agenda-->
+    <div id="novoEvento" class="row my-2 mx-1 py-4 border rounded d-none">
       <div class="col-12">
         <form action="" id="formNovoEvento">
           <div class="row">
             <div class="col-12">
-              <h2>Novo Evento</h2>
+              <h2>Novo Agendamento</h2>
             </div>
           </div>
-          <div class="row g-3">
+          <div class="row g-4">
             <div class="col-12">
-              <label for="nomeEvento" class="form-label">Nome do Evento</label>
+              <label for="nomeEvento" class="form-label">Destino / Descrição</label>
               <input type="text" name="nomeEvento" id="nomeEvento" class="form-control">
             </div>
-            <div class="col-12">
-              <label for="dataEvento" class="form-label">Data do Evento</label>
+            <div class="col-4">
+              <label for="dataEvento" class="form-label">Data do Serviço</label>
               <input type="datetime-local" name="dataEvento" id="dataEvento" class="form-control">
+            </div>
+            <div class="col-8">
+              <label for="qtdePassageiros" class="form-label">Passageiros</label>
+              <input type="text" name="qtdePassageiros" id="qtdePassageiros" class="form-control">
+            </div>
+            <div class="col-12">
+              <label for="nomeMotorista" class="form-label">Motorista</label>
+              <input type="text" name="nomeMotorista" id="nomeMotorista" class="form-control">
             </div>
             <div class="col-12">
               <div id="mensagemErro" class="alert alert-danger d-none" role="alert">
@@ -41,15 +51,17 @@
           </div>
         </form>
       </div>
-    </div>
+    </div> <!--Término do container de inclusão de novos eventos-->
+
+    <!--Quadro de agendamentos-->
     <div class="row">
       <div class="col">
         <h2>
-          Eventos
+          Agendamentos
         </h2>
       </div>
       <div class="col-auto">
-        <button type="button" class="btn btn-success" id="buttonNovoEvento">Novo Evento</button>
+        <button type="button" class="btn btn-success" id="buttonNovoEvento">Novo Agendamento</button>
       </div>
     </div>
     <div class="row">
@@ -57,8 +69,10 @@
         <table class="table">
           <thead>
             <tr>
+              <th scope="col">Descrição</th>
               <th scope="col">Data</th>
-              <th scope="col">Evento</th>
+              <th scope="col">Passageiros</th>
+              <th scope="col">Motorista</th>
               <th scope="col">Ações</th>
             </tr>  
           </thead>

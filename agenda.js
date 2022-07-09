@@ -4,6 +4,8 @@ var novoEvento = document.getElementById('novoEvento');
 var formNovoEvento = document.getElementById('formNovoEvento');
 var inputNomeEvento = document.getElementById('nomeEvento');
 var inputDataEvento = document.getElementById('dataEvento');
+var inputQtdePassageiros = document.getElementById('qtdePassageiros');
+var inputNomeMotorista = document.getElementById('nomeMotorista');
 var divMensagemErro = document.getElementById('mensagemErro');
 var tabelaAgendamentos = document.getElementById('tabelaAgendamentos');
 
@@ -17,7 +19,7 @@ function removerAgendamento(event){
 
 function atualizarAgendamentos() {
     if (listaAgendamentos.length === 0){
-        tabelaAgendamentos.innerHTML = '<tr><td colspan="3">Nenhum agendamento</td></tr>';
+        tabelaAgendamentos.innerHTML = '<tr><td colspan="5">Nenhum agendamento</td></tr>';
         return;
     }
     tabelaAgendamentos.innerHTML = '';
@@ -26,6 +28,8 @@ function atualizarAgendamentos() {
         var linha = document.createElement('tr');
         var celulaNome = document.createElement('td');
         var celulaData = document.createElement('td');
+        var celulaPass = document.createElement('td');
+        var celulaMot = document.createElement('td');
         var celulaAcoes = document.createElement('td');
         var botaoExcluir = document.createElement('button');
         botaoExcluir.setAttribute('data-agenda', i);
@@ -35,10 +39,14 @@ function atualizarAgendamentos() {
         botaoExcluir.addEventListener('click', removerAgendamento);
         celulaNome.innerText = agendamento.nome;
         celulaData.innerText = agendamento.data;
+        celulaPass.innerText = agendamento.passageiros;
+        celulaMot.innerText = agendamento.motorista;
         botaoExcluir.innerText = "Remover";
         celulaAcoes.appendChild(botaoExcluir);
         linha.appendChild(celulaNome);
         linha.appendChild(celulaData);
+        linha.appendChild(celulaPass);
+        linha.appendChild(celulaMot);
         linha.appendChild(celulaAcoes);
         tabelaAgendamentos.appendChild(linha);
     }
@@ -47,8 +55,12 @@ function atualizarAgendamentos() {
 function limparNovoEvento() {
     inputNomeEvento.value = '';
     inputDataEvento.value = '';
+    inputQtdePassageiros.value = '';
+    inputNomeMotorista.value = '';
     inputNomeEvento.classList.remove('is-invalid');
     inputDataEvento.classList.remove('is-invalid');
+    inputQtdePassageiros.classList.remove('is-invalid');
+    inputNomeMotorista.classList.remove('is-invalid');
     divMensagemErro.classList.add('d-none');
     divMensagemErro.innerHTML = '';
 }
@@ -59,13 +71,13 @@ function mostrarNovoEvento() {
 }
 
 function ocultarNovoEvento() {
-    
     novoEvento.classList.add('d-none');
 }
 
-function novoEventoValido(nomeEvento, dataEvento) {
+function novoEventoValido(nomeEvento, dataEvento, qtdePassageiros, nomeMotorista) {
     var validacaoOk = true;
     var erro = '';
+
     if (nomeEvento.trim().length === 0) {
         erro = 'O nome do evento é obrigatório!';
         inputNomeEvento.classList.add('is-invalid');
@@ -73,6 +85,7 @@ function novoEventoValido(nomeEvento, dataEvento) {
     } else {
         inputNomeEvento.classList.remove('is-invalid');
     }
+
     var timestampEvento = Date.parse(dataEvento);
     var timestampAtual = (new Date()).getTime();
     if (isNaN(timestampEvento) || timestampEvento < timestampAtual) {
@@ -84,6 +97,22 @@ function novoEventoValido(nomeEvento, dataEvento) {
         validacaoOk = false;
     } else {
         inputDataEvento.classList.remove('is-invalid');
+    }
+
+    if (qtdePassageiros.trim().length === 0) {
+        erro = 'É necessário informar os passageiros!';
+        inputQtdePassageiros.classList.add('is-invalid');
+        validacaoOk = false;
+    } else {
+        inputQtdePassageiros.classList.remove('is-invalid');
+    }
+
+    if (nomeMotorista.trim().length === 0) {
+        erro = 'Escolha seu motorista!';
+        inputNomeMotorista.classList.add('is-invalid');
+        validacaoOk = false;
+    } else {
+        inputNomeMotorista.classList.remove('is-invalid');
     }
 
     if (!validacaoOk) {
@@ -100,11 +129,16 @@ function salvarNovoEvento(event) {
     event.preventDefault();
     var nomeEvento = inputNomeEvento.value;
     var dataEvento = inputDataEvento.value;
-    if (novoEventoValido(nomeEvento, dataEvento)) {
+    var passageiros = inputQtdePassageiros.value;
+    var motorista = inputNomeMotorista.value;
+
+    if (novoEventoValido(nomeEvento, dataEvento, passageiros, motorista)) {
         console.log('Evento é válido!');
         listaAgendamentos.push({
             nome: nomeEvento,
             data: new Date(dataEvento),
+            passageiros: passageiros,
+            motorista: motorista,
         });
         atualizarAgendamentos();
         ocultarNovoEvento();
